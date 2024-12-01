@@ -3,5 +3,4 @@ streamlit
 scikit-learn
 pandas
 numpy
-sklearn
 shap
