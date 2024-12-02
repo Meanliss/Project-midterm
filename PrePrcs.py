@@ -7,6 +7,7 @@ import joblib
 cvt_date = lambda date_obj: date_obj.strftime("%b-%d") 
 
 def handle_data(input_data):
+    print("flag")
     #unpacking
     last_credit_pull_d, last_pymnt_d, term, sub_grade = input_data
     loan_df = pd.read_csv("loan_df.csv")
@@ -28,9 +29,11 @@ def handle_data(input_data):
     #label data
     label_encoder = LabelEncoder()
 
+    #add the data point in the bottoms of the df
     filter = 'last_credit_pull_d last_pymnt_d term sub_grade'.split(' ')
     loan_df = loan_df[filter]
     loan_df= pd.concat([loan_df,input_data], ignore_index= True) 
+
 
     for col in input_data:
         loan_df[col] = label_encoder.fit_transform(loan_df[col])
@@ -38,12 +41,20 @@ def handle_data(input_data):
 
     for col in input_data:
         freq_encoding = loan_df[col].value_counts().to_dict()
-        input_data[col] = input_data[col].map(freq_encoding)
+        freq_encoding = loan_df[col].map(freq_encoding)
+        input_data[col] = input_data[col].map(freq_encoding).fillna(0) 
 
+    mapping_term = {
+        '36 months' : 26678,
+        '60 months' : 9047,
+        'NaN' : 1091
+    }
 
+    input_data['term'] = mapping_term[term]
     return input_data
 
 # Kiểm tra và thêm nhãn mới nếu cần
+
 
 
 
