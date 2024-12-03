@@ -10,7 +10,7 @@ def handle_data(input_data):
     print("flag")
     #unpacking
     last_credit_pull_d, last_pymnt_d, term, sub_grade = input_data
-    loan_df = pd.read_csv("loan_df.csv")
+    loan_df = pd.read_csv("Data\loan_df.csv")
 
     # Làm tương tự cho các cột khác trong binary_cols
 
