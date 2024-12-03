@@ -73,7 +73,7 @@ if st.button('Predict'):
 
     shap.initjs()
     shap.force_plot(explainer.expected_value[0],  # Giá trị kỳ vọng cho lớp đầu tiên
-                    shap_values[0, :, prediction[0]].reshape((1, 4)),  # Giá trị SHAP cho lớp đầu tiên
+                    shap_values[0, :, 1].reshape((1, 4)),  # Giá trị SHAP cho lớp đầu tiên
                     input_data.iloc[0].values.reshape((1, 4)),  # Dữ liệu gốc (dòng đầu tiên của DataFrame)
                     matplotlib=True,
                     show = True)
