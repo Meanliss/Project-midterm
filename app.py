@@ -12,7 +12,7 @@ from PrePrcs import handle_data
 
     
 #load model
-dt_path = "Model\dt_model.pkl"
+dt_path = "Model/dt_model.pkl"
 # lr_path = "Model\logistic_model.pkl"
 # nn_path =  "Model\neural_network_model.pkl"
 dt_model = joblib.load(dt_path)
