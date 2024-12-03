@@ -6,6 +6,40 @@ import joblib
 
 cvt_date = lambda date_obj: date_obj.strftime("%b-%d") 
 
+def explain_decision_tree_prediction(last_credit_pull_d, last_pymnt_d, term, sub_grade, prediction, model):
+    """
+    Explains the Decision Tree model's prediction (0: rejected, 1: accepted)
+    based on the input features.
+    """
+
+    if prediction == 0:  # Loan Rejected
+        explanation = "The loan application was likely rejected due to the following factors:\n"
+
+        if last_credit_pull_d < model.tree_.threshold[0]:
+            explanation += "- **last_credit_pull_d:** The recent credit inquiry indicates potential financial instability.\n"
+        else:
+            explanation += "- **last_credit_pull_d:** The credit inquiry timing is favorable.\n"
+
+        if last_pymnt_d < model.tree_.threshold[1]:
+            explanation += "- **last_pymnt_d:** The recent last payment date might raise concerns about repayment capacity.\n"
+        else:
+            explanation += "- **last_pymnt_d:** The last payment date is not a major concern.\n"
+
+        if term < model.tree_.threshold[2]:
+            explanation += "- **term:** The shorter loan term could suggest higher risk.\n"
+        else:
+            explanation += "- **term:** The longer loan term is considered less risky.\n"
+
+        if sub_grade < model.tree_.threshold[3]:
+            explanation += "- **sub_grade:** The lower sub_grade indicates a higher risk profile.\n"
+        else:
+            explanation += "- **sub_grade:** The sub_grade is acceptable.\n"
+
+        return explanation
+
+    else:  # Loan Accepted
+        return "The loan application was likely accepted based on the provided features."
+
 def handle_data(input_data):
     print("flag")
     #unpacking

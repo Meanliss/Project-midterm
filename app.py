@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelEncoder
 import shap
 import matplotlib.pyplot as plt
 import os
-from PrePrcs import handle_data
+from PrePrcs import handle_data, explain_decision_tree_prediction
 
     
 #load model
@@ -57,18 +57,27 @@ if st.button('Predict'):
     print(f" predict in : {input_data.values.reshape(1,-1)}")
     prediction = dt_model.predict(input_data.values.reshape(1,-1))
     print(prediction)
-    st.success(f'The loan approval prediction is: {"Approved" if prediction[0] == 1 else "Not Approved"}')
+    st.success(f'{"Approved " if prediction[0] == 1 else "Not Approved"}')
 
-    # # Giải thích dự đoán với SHAP
-    # explainer = joblib.load("explainer_dt.pkl")  # Load explainer đã huấn luyện
-    # shap_values = explainer(input_data)
+    explain = explain_decision_tree_prediction(*input_data.iloc[0],prediction[0],dt_model)
+    
+    # Get SHAP values for the input data
+    explainer = shap.TreeExplainer(dt_model)
+    shap_values = explainer.shap_values(input_data)
 
-    # # Biểu đồ Waterfall
-    # st.subheader("Explanation of the Prediction")
-    # st.markdown("Below is the contribution of each feature to the model's decision:")
+    # Generate the SHAP force plot
 
-    # # Waterfall plot
-    # fig, ax = plt.subplots(figsize=(10, 6))
-    # shap.waterfall_plot(shap_values[0], show=False)  # Chọn giá trị đầu tiên (dữ liệu input của người dùng)
-    # st.pyplot(fig)
+    print(shap_values.shape)
+    print(input_data.shape)
+    print()
 
+    shap.initjs()
+    shap.force_plot(explainer.expected_value[0],  # Giá trị kỳ vọng cho lớp đầu tiên
+                    shap_values[0, :, prediction[0]].reshape((1, 4)),  # Giá trị SHAP cho lớp đầu tiên
+                    input_data.iloc[0].values.reshape((1, 4)),  # Dữ liệu gốc (dòng đầu tiên của DataFrame)
+                    matplotlib=True,
+                    show = True)
+
+    plt.tight_layout()
+    st.pyplot(plt)
+    st.success(explain)
