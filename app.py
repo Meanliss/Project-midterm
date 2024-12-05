@@ -143,7 +143,7 @@ input_data = handle_data(result)
 if not zip_code or not emp_title or not title: 
     st.error("Please fill out all required fields: ZIP Code, Employment Title, and Loan Title.") 
 elif not is_valid_zip_code(zip_code): 
-    st.error("Please enter a valid ZIP Code (first 3 digits onlu).")
+    st.error("Please enter a valid ZIP Code (first 3 digits only).")
 else:
 
     if st.button('Predict'):

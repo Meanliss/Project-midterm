@@ -8,9 +8,9 @@ import re
 cvt_date = lambda date_obj: date_obj.strftime("%b-%d") 
 
 import shap
-def is_valid_zip_code(zip_code): 
-    """Checks if the provided zip code is valid.""" 
-    return bool(re.match(r'^\d{3}$', zip_code))
+def is_valid_zip_code(zip_code):
+    """Checks if the provided zip code is valid."""
+    return zip_code.isdigit() and len(zip_code) == 3
 
 def explain_xgb_prediction(model, input_data, top_n=3):
     explainer = shap.TreeExplainer(model)
